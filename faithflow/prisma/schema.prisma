@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  prayers   Prayer[]
+}
+
+model Prayer {
+  id        String   @id @default(cuid())
+  author    User?    @relation(fields: [authorId], references: [id])
+  authorId  String?
+  request   String
+  prayedBy  Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Devotional {
+  id        String   @id @default(cuid())
+  title     String
+  reference String
+  content   String
+  createdAt DateTime @default(now())
+}
